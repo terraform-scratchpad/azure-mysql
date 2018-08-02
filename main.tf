@@ -9,6 +9,7 @@ provider "random" {
 resource "random_string" "mysql-admin-username" {
   length = 10
   special = false
+  upper = false
 }
 
 resource "random_string" "mysql-db-name" {
