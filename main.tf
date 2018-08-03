@@ -25,7 +25,6 @@ resource "random_string" "mysql-admin-password" {
 }
 
 resource "azurerm_mysql_server" "mysql-server" {
-
   name                          = "${random_string.mysql-admin-username.id}-mysql-server-${count.index}"
   location                      = "${var.location}"
   resource_group_name           = "${var.resource_group_name}"
