@@ -5,11 +5,17 @@ provider "azurerm" {
 provider "random" {
   version = "1.3.1"
 }
+resource "random_string" "mysql-unique-id" {
+  length = 10
+  special = false
+  upper = false
+}
 
 resource "random_string" "mysql-admin-username" {
   length = 10
   special = false
   upper = false
+  number = false
 }
 
 resource "random_string" "mysql-db-name" {
@@ -27,7 +33,7 @@ resource "random_string" "mysql-admin-password" {
 
 resource "azurerm_mysql_server" "mysql-server" {
 
-  name                          = "${random_string.mysql-admin-username.result}mysqlserver"
+  name                          = "${random_string.mysql-unique-id.result}mysqlserver"
   location                      = "${var.location}"
   resource_group_name           = "${var.resource_group_name}"
   administrator_login           = "${random_string.mysql-admin-username.result}"
@@ -60,7 +66,7 @@ resource "azurerm_mysql_server" "mysql-server" {
 resource "azurerm_mysql_firewall_rule" "stg-mysql-firewall-rules" {
   start_ip_address            = "${var.mysql_start_ip_address}"
   end_ip_address              = "${var.mysql_end_ip_address}"
-  name                        = "stg-mysql-firewall-rules-${random_string.mysql-admin-username.result}"
+  name                        = "stg-mysql-firewall-rules-${random_string.mysql-unique-id.result}"
   resource_group_name         = "${var.resource_group_name}"
   server_name                 = "${azurerm_mysql_server.mysql-server.name}"
 }
